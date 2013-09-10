@@ -18,6 +18,9 @@
 		B6C2ECBB17DCE0460070C770 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C2ECBA17DCE0460070C770 /* Default-568h@2x.png */; };
 		B6C2ECBE17DCE0460070C770 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6C2ECBC17DCE0460070C770 /* MainStoryboard.storyboard */; };
 		B6C2ECC117DCE0460070C770 /* SKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C2ECC017DCE0460070C770 /* SKViewController.m */; };
+		B6C2ECC917DCE0780070C770 /* SKCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C2ECC817DCE0780070C770 /* SKCanvas.m */; };
+		B6C2ECCB17DCE6B10070C770 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6C2ECCA17DCE6B10070C770 /* AssetsLibrary.framework */; };
+		B6C2ECCE17DE460F0070C770 /* SKLifeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,11 @@
 		B6C2ECBD17DCE0460070C770 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		B6C2ECBF17DCE0460070C770 /* SKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SKViewController.h; sourceTree = "<group>"; };
 		B6C2ECC017DCE0460070C770 /* SKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SKViewController.m; sourceTree = "<group>"; };
+		B6C2ECC717DCE0780070C770 /* SKCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKCanvas.h; sourceTree = "<group>"; };
+		B6C2ECC817DCE0780070C770 /* SKCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKCanvas.m; sourceTree = "<group>"; };
+		B6C2ECCA17DCE6B10070C770 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		B6C2ECCC17DE460F0070C770 /* SKLifeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKLifeItem.h; sourceTree = "<group>"; };
+		B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKLifeItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6C2ECCB17DCE6B10070C770 /* AssetsLibrary.framework in Frameworks */,
 				B6C2ECA517DCE0460070C770 /* UIKit.framework in Frameworks */,
 				B6C2ECA717DCE0460070C770 /* Foundation.framework in Frameworks */,
 				B6C2ECA917DCE0460070C770 /* CoreGraphics.framework in Frameworks */,
@@ -56,6 +65,7 @@
 		B6C2EC9817DCE0460070C770 = {
 			isa = PBXGroup;
 			children = (
+				B6C2ECCA17DCE6B10070C770 /* AssetsLibrary.framework */,
 				B6C2ECAA17DCE0460070C770 /* LifeModel */,
 				B6C2ECA317DCE0460070C770 /* Frameworks */,
 				B6C2ECA217DCE0460070C770 /* Products */,
@@ -83,6 +93,10 @@
 		B6C2ECAA17DCE0460070C770 /* LifeModel */ = {
 			isa = PBXGroup;
 			children = (
+				B6C2ECCC17DE460F0070C770 /* SKLifeItem.h */,
+				B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */,
+				B6C2ECC717DCE0780070C770 /* SKCanvas.h */,
+				B6C2ECC817DCE0780070C770 /* SKCanvas.m */,
 				B6C2ECB317DCE0460070C770 /* SKAppDelegate.h */,
 				B6C2ECB417DCE0460070C770 /* SKAppDelegate.m */,
 				B6C2ECBC17DCE0460070C770 /* MainStoryboard.storyboard */,
@@ -177,6 +191,8 @@
 				B6C2ECB117DCE0460070C770 /* main.m in Sources */,
 				B6C2ECB517DCE0460070C770 /* SKAppDelegate.m in Sources */,
 				B6C2ECC117DCE0460070C770 /* SKViewController.m in Sources */,
+				B6C2ECC917DCE0780070C770 /* SKCanvas.m in Sources */,
+				B6C2ECCE17DE460F0070C770 /* SKLifeItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +280,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LifeModel/LifeModel-Prefix.pch";
 				INFOPLIST_FILE = "LifeModel/LifeModel-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -275,7 +293,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LifeModel/LifeModel-Prefix.pch";
 				INFOPLIST_FILE = "LifeModel/LifeModel-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -299,6 +319,7 @@
 				B6C2ECC617DCE0460070C770 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
