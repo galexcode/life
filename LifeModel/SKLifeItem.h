@@ -19,6 +19,5 @@
 
 -(id) initWithX: (int) _x Y: (int) _y ;
 
--(id) initWithScreenX:(float) _x ScreenY: (float) _y ;
 
 @end

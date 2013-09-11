@@ -8,9 +8,13 @@
 
 #import "SKCanvas.h"
 
+const CGFloat CELL_SIZE = 40.0;
 @implementation SKCanvas
 {
     NSTimer *myTicker;
+
+    CGRect lifeField;
+     
 }
 
 @synthesize points, maxX, maxY;
@@ -19,7 +23,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
     }
 
     return self;
@@ -32,79 +35,91 @@
 - (void)drawRect:(CGRect)rect
 {
 
-
-//    [self.points addObject: [[SKLifeItem alloc ]initWithX: 1 Y: 1] ];
-//    [self.points addObject:[[SKLifeItem alloc ]initWithX: 5 Y: 2] ];
-//    [self.points addObject:[[SKLifeItem alloc ]initWithX: 10 Y: 3]];
-
-
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextClearRect(ctx, rect);
 
     CGContextSetRGBFillColor(ctx, 0.0f, 1.0f, 1.0f, 0.5f);
-    CGContextSetRGBStrokeColor(ctx, 1.0f, 1.0f, 0.0f, 0.5f);
 
-    //CGContextRotateCTM(ctx, M_PI);
-
-    CGContextTranslateCTM(ctx, 10, 10);
-
-    /*
-     CGContextMoveToPoint(ctx, 0,0);
-     CGContextAddLineToPoint(ctx, 100, 0);
-     CGContextStrokePath(ctx);
-
-     CGContextMoveToPoint(ctx, 0,0);
-     CGContextAddLineToPoint(ctx, 0, 100);
-     CGContextStrokePath(ctx);
-     */
     [self drawCellsWithContext:ctx];
-    CGContextSetRGBStrokeColor(ctx, 1.0f, 0.0f, 0.0f, 1);
 
     for (SKLifeItem* cell in self.points) {
-        float x = cell.x * 20 + 2.0;
-        float y = cell.y * 20 + 2.0;
+        float x = [self convertToScreenCellX:cell.x];
+        float y = [self convertToScreenCellY:cell.y];
 
-//        //NSLog(@" x = %i y = %i xx = %f yy = %f" , cell.x, cell.y, x, y);
-        CGRect rectangle = CGRectMake(x,y, 16.0, 16.0 );
+        CGRect rectangle = CGRectMake(x,y, CELL_SIZE - 4, CELL_SIZE - 4 );
         CGContextFillRect(ctx, rectangle);
-
     }
 
 
 }
+/**
+ Преобразует экранную координатy в номер ячейки
+ */
+-(int) convertToCellScreenX:(CGFloat) _x {
+    return div( _x - lifeField.origin.x , CELL_SIZE).quot;
+}
 
+/**
+ Преобразует экранную координатy в номер ячейки
+ */
+-(int) convertToCellScreenY:(CGFloat) _y {
+    return div( _y - lifeField.origin.y , CELL_SIZE).quot;
+}
+
+
+- (CGFloat) convertToScreenCellX:(int) _x {
+    return _x*CELL_SIZE + lifeField.origin.x + 2;
+}
+
+- (CGFloat) convertToScreenCellY:(int) _y {
+    return _y*CELL_SIZE + lifeField.origin.y + 2;
+}
+
+
+// рисует сетку
+//
 -(void) drawCellsWithContext: (CGContextRef)ctx {
-    CGContextSetRGBStrokeColor(ctx, 1.0f, 1.0f, 1.0f, 1);
-    CGRect rectangle = CGRectMake(0,0, self.bounds.size.width -20, self.bounds.size.height-20 );
-    CGContextSetLineWidth(ctx, 3.0f);
-    CGContextStrokeRect(ctx, rectangle);
 
+    CGFloat screenWidth = self.bounds.size.width;
+    CGFloat screenHeight = self.bounds.size.height - 40;
+
+    div_t ret = div(screenWidth, CELL_SIZE);
+    CGFloat len = (ret.quot - 1) * CELL_SIZE;
+    CGFloat startX = (screenWidth - len) / 2;
+    ret = div(screenHeight, CELL_SIZE);
+    CGFloat hight = (ret.quot - 1) * CELL_SIZE;
+    CGFloat startY = (screenHeight - hight) / 2;
+
+    CGContextSetRGBStrokeColor(ctx, 0.5f, 0.5f, 0.5f, 1.0f);
     CGContextSetLineWidth(ctx, 1.0f);
     self.maxX = 0;
     self.maxY = 0;
-    int x = 20;
-    while (x < self.bounds.size.width){
-        self.maxX++;
-        CGContextMoveToPoint(ctx, x,0);
-        CGContextAddLineToPoint(ctx, x, self.bounds.size.height - 20 );
+    for (int x = startX; x <= startX + len; x += CELL_SIZE) {
+        CGContextMoveToPoint(ctx, x, startY);
+        CGContextAddLineToPoint(ctx, x, startY + hight );
         CGContextStrokePath(ctx);
-        x += 20;
     }
-    int y = 20;
-    while (y < self.bounds.size.height){
-        self->maxY++;
-        CGContextMoveToPoint(ctx, 0, y);
-        CGContextAddLineToPoint(ctx, self.bounds.size.width - 20, y);
+
+    for (int y = startY; y <= startY + hight; y += CELL_SIZE) {
+        CGContextMoveToPoint(ctx, startX, y);
+        CGContextAddLineToPoint(ctx, startX + len, y );
         CGContextStrokePath(ctx);
-        y += 20;
     }
+
+
+    CGContextSetRGBStrokeColor(ctx, 1.5f, 1.5f, 1.5f, 1.0f);
+    lifeField = CGRectMake(startX, startY, len, hight );
+    CGContextSetLineWidth(ctx, 1.0f);
+    CGContextStrokeRect(ctx, lifeField);
+
     //NSLog(@" x = %i, y = %i", self.maxX, self.maxY);
 }
+
 
 - (void) touchesBegan:(NSSet *) touches withEvent:(UIEvent *) event {
 
     UITouch *touch = [[event allTouches] anyObject];
-    CGPoint tp = [touch locationInView: self];
+    CGPoint tp = [touch  locationInView: self];
     float x = tp.x;
     float y = tp.y;
 
@@ -115,17 +130,21 @@
 
         //NSLog(@"все");
 //        [self twingle];
-        myTicker = [NSTimer scheduledTimerWithTimeInterval:1.0 target: self
+        myTicker = [NSTimer scheduledTimerWithTimeInterval:0.3 target: self
                                        selector:@selector(twingle)
                                        userInfo: nil
                                         repeats: YES];
 
     } else {
-        //NSLog(@"тык %f %f" , x , y);
-        SKLifeItem* item = [[SKLifeItem alloc] initWithScreenX: x ScreenY: y];
+        if ( !CGRectContainsPoint(lifeField, tp) ) {
+            return;
+        }
+        int cellX = [self convertToCellScreenX:x];
+        int cellY = [self convertToCellScreenY:y];
+//        NSLog(@"тык %f %f  %f %i  %f %i", x, y, startX , cellX,  startY, cellY);
+        SKLifeItem* item = [[SKLifeItem alloc] initWithX: cellX Y: cellY  ];
         [self.points addObject: item ];
         [self setNeedsDisplay];
-        //NSLog(@" %@ " , self.points);
     }
 }
 

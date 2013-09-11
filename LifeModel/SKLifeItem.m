@@ -30,20 +30,6 @@
     return self;
 }
 
--(id) initWithScreenX:(float) _x ScreenY: (float) _y {
-	self = [super init];
-	if (self != nil) {
-        self.x = div(_x-15, 20).quot;
-        self.y = div(_y-15,20).quot;
-        NSLog(@"init with screen %f %f %i %i", _x , _y, self.x , self.y);
-        // как-то преобразуем координаты
-//        self.x = 1;
-//        self.y = 1;
-    }
-    return self;
-}
-
-
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"{%i %i}", self.x, self.y];
