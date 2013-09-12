@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SKLifeItem.h"
+#import "SKLifeField.h"
 
 @interface SKCanvas : UIView
 
 @property int maxX;
 @property int maxY;
 
+@property SKLifeField * field;
+
 @property NSMutableArray *points;
-@property NSMutableArray *pointsX;
-@property NSMutableArray *pointsY;
+//@property NSMutableArray *pointsX;
+//@property NSMutableArray *pointsY;
 
 @end

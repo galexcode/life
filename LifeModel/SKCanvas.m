@@ -17,7 +17,7 @@ const CGFloat CELL_SIZE = 40.0;
      
 }
 
-@synthesize points, maxX, maxY;
+@synthesize points, field, maxX, maxY;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -42,7 +42,7 @@ const CGFloat CELL_SIZE = 40.0;
 
     [self drawCellsWithContext:ctx];
 
-    for (SKLifeItem* cell in self.points) {
+    for (SKLifeItem* cell in self.field.points) {
         float x = [self convertToScreenCellX:cell.x];
         float y = [self convertToScreenCellY:cell.y];
 
@@ -84,16 +84,16 @@ const CGFloat CELL_SIZE = 40.0;
     CGFloat screenHeight = self.bounds.size.height - 40;
 
     div_t ret = div(screenWidth, CELL_SIZE);
+    self.maxX = ret.quot;
     CGFloat len = (ret.quot - 1) * CELL_SIZE;
     CGFloat startX = (screenWidth - len) / 2;
     ret = div(screenHeight, CELL_SIZE);
+    self.maxY = ret.quot;
     CGFloat hight = (ret.quot - 1) * CELL_SIZE;
     CGFloat startY = (screenHeight - hight) / 2;
 
     CGContextSetRGBStrokeColor(ctx, 0.5f, 0.5f, 0.5f, 1.0f);
     CGContextSetLineWidth(ctx, 1.0f);
-    self.maxX = 0;
-    self.maxY = 0;
     for (int x = startX; x <= startX + len; x += CELL_SIZE) {
         CGContextMoveToPoint(ctx, x, startY);
         CGContextAddLineToPoint(ctx, x, startY + hight );
@@ -112,7 +112,7 @@ const CGFloat CELL_SIZE = 40.0;
     CGContextSetLineWidth(ctx, 1.0f);
     CGContextStrokeRect(ctx, lifeField);
 
-    //NSLog(@" x = %i, y = %i", self.maxX, self.maxY);
+    ////NSLog(@" x = %i, y = %i", self.maxX, self.maxY);
 }
 
 
@@ -125,10 +125,11 @@ const CGFloat CELL_SIZE = 40.0;
 
     if (self.points == nil) {
         self.points = [NSMutableArray arrayWithCapacity:1];
+        self.field = [[SKLifeField alloc] initWithSizeX: self.maxX-1 SizeY: self.maxY-1 ];
     }
-    if ([self.points count ] >= 10) {
+    if ([self.points count ] >= 15) {
 
-        //NSLog(@"все");
+        //////NSLog(@"все");
 //        [self twingle];
         myTicker = [NSTimer scheduledTimerWithTimeInterval:0.3 target: self
                                        selector:@selector(twingle)
@@ -141,9 +142,11 @@ const CGFloat CELL_SIZE = 40.0;
         }
         int cellX = [self convertToCellScreenX:x];
         int cellY = [self convertToCellScreenY:y];
-//        NSLog(@"тык %f %f  %f %i  %f %i", x, y, startX , cellX,  startY, cellY);
+//        ////NSLog(@"тык %f %f  %f %i  %f %i", x, y, startX , cellX,  startY, cellY);
         SKLifeItem* item = [[SKLifeItem alloc] initWithX: cellX Y: cellY  ];
         [self.points addObject: item ];
+
+        [self.field addPointWithX:cellX Y:cellY];
         [self setNeedsDisplay];
     }
 }
@@ -151,11 +154,11 @@ const CGFloat CELL_SIZE = 40.0;
 
 -(BOOL) containsInPointsByX:(int) _x Y: (int) _y {
 // это самый ресурсоемкий метод
-    //NSLog(@"x = %i y = %i", _x, _y);
-//    //NSLog(@"arrays %@ %@", self.pointsX, self.pointsY);
+    ////NSLog(@"x = %i y = %i", _x, _y);
+//    ////NSLog(@"arrays %@ %@", self.pointsX, self.pointsY);
 
     for (SKLifeItem* item in self.points) {
-        //NSLog(@"check pair %i %i", item.x, item.y);
+        ////NSLog(@"check pair %i %i", item.x, item.y);
         if (item.x == _x && item.y == _y) {
             return YES;
         }
@@ -165,20 +168,20 @@ const CGFloat CELL_SIZE = 40.0;
 
 
 -(void) addCandidateTo:(NSCountedSet*) cells WithX:(int) x Y:(int) y {
-    //NSLog(@"try add %i %i %i %i", x, y, self.maxX, self.maxY);
+    ////NSLog(@"try add %i %i %i %i", x, y, self.maxX, self.maxY);
     if( x < 0 || x > self.maxX - 1) {
-        //NSLog(@"no add. x border");
+        ////NSLog(@"no add. x border");
         return;
     }
     if ( y < 0 || y > self.maxY -1 ) {
-        //NSLog(@"no add. y border");
+        ////NSLog(@"no add. y border");
         return;
     }
     if ( [self containsInPointsByX:x Y:y]) {
-        //NSLog(@"no add. points contain this");
+        ////NSLog(@"no add. points contain this");
         return;
     }
-    //NSLog(@"add");
+    ////NSLog(@"add");
     [cells addObject: [NSString stringWithFormat: @"%i,%i", x, y] ];
 }
 
@@ -262,16 +265,14 @@ const CGFloat CELL_SIZE = 40.0;
     } else {
         return NO;
     }
-
-
 }
 
 - (void) twingle {
     if([self.points count] == 0) {
         [myTicker invalidate];
     }
-    //NSLog(@"start %@", self.points);
-
+    ////NSLog(@"start %@", self.points);
+/*
     NSCountedSet* newCells = [[NSCountedSet alloc] init];
     for (SKLifeItem* cell in self.points) {
         [self addCandidatesTo:newCells forPoint:cell];
@@ -279,7 +280,7 @@ const CGFloat CELL_SIZE = 40.0;
 
     NSMutableArray* newItems = [NSMutableArray arrayWithCapacity:1];
     for (NSString* str in [newCells allObjects] ){
-        //NSLog(@" %@ %i", str , [newCells countForObject:str]);
+        ////NSLog(@" %@ %i", str , [newCells countForObject:str]);
         if ([newCells countForObject:str] == 3) {
             NSArray *split = [str componentsSeparatedByString:@","];
 
@@ -291,7 +292,7 @@ const CGFloat CELL_SIZE = 40.0;
     }
     [self setNeedsDisplay];
 
-    //NSLog(@"before die %@", self.points);
+    ////NSLog(@"before die %@", self.points);
     NSMutableArray* die = [NSMutableArray arrayWithCapacity:1];
 
     for (SKLifeItem* item in self.points) {
@@ -302,14 +303,16 @@ const CGFloat CELL_SIZE = 40.0;
     for (SKLifeItem* item in die) {
         [self.points removeObject:item];
     }
+
     [self.points addObjectsFromArray:newItems];
 
 
     if ([newItems count] == 0 && [die count] == 0) {
         [myTicker invalidate];
     }
-    //NSLog(@"itogo %@ ", self.points);
-
+    ////NSLog(@"itogo %@ ", self.points);
+*/
+    [self.field recountField];
     [self setNeedsDisplay];
 
 }

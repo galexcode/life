@@ -21,6 +21,7 @@
 		B6C2ECC917DCE0780070C770 /* SKCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C2ECC817DCE0780070C770 /* SKCanvas.m */; };
 		B6C2ECCB17DCE6B10070C770 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6C2ECCA17DCE6B10070C770 /* AssetsLibrary.framework */; };
 		B6C2ECCE17DE460F0070C770 /* SKLifeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */; };
+		B6EB0F0F17E23FA100E79E29 /* SKLifeField.m in Sources */ = {isa = PBXBuildFile; fileRef = B6EB0F0E17E23FA100E79E29 /* SKLifeField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,8 @@
 		B6C2ECCA17DCE6B10070C770 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		B6C2ECCC17DE460F0070C770 /* SKLifeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKLifeItem.h; sourceTree = "<group>"; };
 		B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKLifeItem.m; sourceTree = "<group>"; };
+		B6EB0F0D17E23FA100E79E29 /* SKLifeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKLifeField.h; sourceTree = "<group>"; };
+		B6EB0F0E17E23FA100E79E29 /* SKLifeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKLifeField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +98,8 @@
 			children = (
 				B6C2ECCC17DE460F0070C770 /* SKLifeItem.h */,
 				B6C2ECCD17DE460F0070C770 /* SKLifeItem.m */,
+				B6EB0F0D17E23FA100E79E29 /* SKLifeField.h */,
+				B6EB0F0E17E23FA100E79E29 /* SKLifeField.m */,
 				B6C2ECC717DCE0780070C770 /* SKCanvas.h */,
 				B6C2ECC817DCE0780070C770 /* SKCanvas.m */,
 				B6C2ECB317DCE0460070C770 /* SKAppDelegate.h */,
@@ -193,6 +198,7 @@
 				B6C2ECC117DCE0460070C770 /* SKViewController.m in Sources */,
 				B6C2ECC917DCE0780070C770 /* SKCanvas.m in Sources */,
 				B6C2ECCE17DE460F0070C770 /* SKLifeItem.m in Sources */,
+				B6EB0F0F17E23FA100E79E29 /* SKLifeField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
