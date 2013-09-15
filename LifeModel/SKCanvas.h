@@ -10,7 +10,10 @@
 #import "SKLifeField.h"
 
 @interface SKCanvas : UIView
+{
+    IBOutlet UILabel* countLabel;
 
+}
 @property int maxX;
 @property int maxY;
 
@@ -19,5 +22,12 @@
 @property NSMutableArray *points;
 //@property NSMutableArray *pointsX;
 //@property NSMutableArray *pointsY;
+
+
+-(IBAction)startLife;
+-(IBAction)stopLife;
+-(IBAction)stepLife;
+
+
 
 @end

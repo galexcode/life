@@ -19,7 +19,7 @@
 
 
 -(void) initInternalStruct {
-
+// заполняет внутреннюю матрицу ноликами
     field = [NSMutableArray arrayWithCapacity:1];
 
     for (int x=0; x<self.sizeX; x++) {
@@ -33,6 +33,7 @@
     self.points = [NSMutableArray arrayWithCapacity:1];
 }
 
+// конструктор по умолчанию размером 10x10
 -(id) init {
 	self = [super init];
 	if (self != nil) {
@@ -43,6 +44,7 @@
     return self;
 }
 
+// конструктор поля размером _x на _y
 -(id) initWithSizeX: (int) _x SizeY: (int) _y {
 	self = [super init];
 	if (self != nil) {
@@ -53,13 +55,11 @@
     return self;
 }
 
-// Возвращает значение (YES или NO) из матрицы по координатам _x _y
+// Возвращает YES - если есть точка или NO - если нет точки по координатам _x _y
 -(BOOL) fieldX:(NSUInteger) _x Y:(NSUInteger) _y {
-    //NSLog(@"field x %i y %i", _x ,_y);
     @try {
         NSMutableArray* col = [field objectAtIndex:_x];
         NSNumber *val = [col objectAtIndex:_y];
-        //NSLog(@"val = %@", val);
         return [val intValue] == 1;
     }
     @catch (NSException *exception) {
@@ -80,31 +80,23 @@
     if ( [self fieldX:_x  Y:_y] ) {
         return NO;
     }
-
     NSMutableArray* col = [field objectAtIndex:_x];
-
     [col replaceObjectAtIndex:_y withObject: [NSNumber numberWithInteger:1]];
-
     SKLifeItem* item = [[SKLifeItem alloc] initWithX: _x Y: _y  ];
     [self.points addObject: item ];
     return YES;
 }
 
-//  Удаляет точку с поля
+// Удаляет точку с поля
 // удаляет ее из списка точек и из матрицы
 -(void) removePoint:(SKLifeItem*) item {
     if ( item.x > self.sizeX  || item.y > self.sizeY || item.x < 0 || item.y < 0) {
         return ;
     }
-
     NSMutableArray* col = [field objectAtIndex:item.x];
-
     [col replaceObjectAtIndex:item.y withObject: [NSNumber numberWithInteger:0]];
-
     [self.points removeObject: item ];
-
 }
-
 
 - (NSString *)description
 {
@@ -112,26 +104,23 @@
 }
 
 
-
+// добавляет точку x,y в список cells
+// добавляет точку в список если эта точка находится внутри поля
+// и не входит в текущий список точек points
 -(void) addCandidateTo:(NSCountedSet*) cells WithX:(int) x Y:(int) y {
-    //NSLog(@"try add %i %i %i %i", x, y, self.sizeX, self.sizeY);
     if( x < 0 || x > self.sizeX - 1) {
-        //NSLog(@"no add. x border");
         return;
     }
     if ( y < 0 || y > self.sizeY -1 ) {
-        //NSLog(@"no add. y border");
         return;
     }
     if ( [self fieldX:x Y:y] == YES) {
-        //NSLog(@"no add. points contain this");
         return;
     }
-    //NSLog(@"add");
     [cells addObject: [NSString stringWithFormat: @"%i,%i", x, y] ];
 }
 
-
+// добавляет соседей точки point в список _candidateCells
 -(void) addCandidatesTo:(NSCountedSet*) _candidateCells forPoint:(SKLifeItem*) point {
 
     int x = point.x;
@@ -182,7 +171,6 @@
 
     NSMutableArray* newItems = [NSMutableArray arrayWithCapacity:1];
     for (NSString* str in [newCells allObjects] ){
-        //NSLog(@" %@ %i", str , [newCells countForObject:str]);
         if ([newCells countForObject:str] == 3) {
             NSArray *split = [str componentsSeparatedByString:@","];
 
@@ -200,7 +188,7 @@
 -(BOOL) mustDie:(SKLifeItem*) _item {
     int x = _item.x;
     int y = _item.y;
-    //NSLog(@" -------------mustdie ? %@ ", _item);
+
     int minX = x - 1;
     if (minX < 0) {
         minX = 0;
@@ -209,20 +197,20 @@
     if (minY < 0) {
         minY = 0;
     }
-    int maxXX = x + 1;
-    if (maxXX >= self.sizeX - 1) {
-        maxXX = x;
+    int maxX = x + 1;
+    if (maxX >= self.sizeX - 1) {
+        maxX = x;
     }
-    int maxYY = y + 1;
-    if (maxYY >= self.sizeY -1) {
-        maxYY = y;
+    int maxY = y + 1;
+    if (maxY >= self.sizeY -1) {
+        maxY = y;
     }
     // кол-во соседей
     int cntNear = 0;
     int xx = minX;
     int yy = minY;
-    while (xx <= maxXX) {
-        while( yy <= maxYY) {
+    while (xx <= maxX) {
+        while( yy <= maxY) {
             //NSLog(@" %i %i cnt %i" , xx, yy, cntNear);
             if ((x == xx ) && (y == yy) ) {
                 yy++;
@@ -241,7 +229,7 @@
     }
 
     /*
-     Как проверить какой метод быстрее (тот что с двумы while и матрицей
+     хорошо бы точнее проверить какой метод быстрее (тот что с двумы while и матрицей
      или каждый раз бегать по массиву точек)
     for(int i = 0; i < [self.points count]; i++) {
         SKLifeItem* item = [self.points objectAtIndex:i];
@@ -257,7 +245,6 @@
     }
 */
     if (cntNear >= 4 || cntNear <= 1) {
-        ////NSLog(@"item %@ die cnt near %i", _item, cntNear);
         return YES;
     } else {
         return NO;
@@ -273,19 +260,14 @@
 
     for (SKLifeItem* item in self.points) {
         if ( [self mustDie:item] ) {
-            //NSLog(@"%@ must die", item);
             [die addObject:item ];
         }
     }
-    //NSLog(@"die items %@",die);
     return die;
 }
 
 // Пересчитываем все поле
 -(void) recountField {
-
-    //NSLog(@"points %@", self.points);
-    //NSLog(@"field %@", field);
 
     NSMutableArray* newItems  = [self newGenerationItems];
 
